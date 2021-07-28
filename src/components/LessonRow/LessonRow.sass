@@ -1,0 +1,71 @@
+.lesson-row
+  display: flex
+
+  &__time
+    display: flex
+    flex-direction: column
+    justify-content: center
+    padding: 4px
+    width: 40px
+    &-item
+      text-align: center
+      &--start
+        font-size: 12px
+      &--end
+        margin-top: 2px
+        font-size: 10px
+        opacity: 0.8
+
+  &__type-title
+    &--0
+      color: tomato
+      padding-right: 2px
+    &--1
+      color: orange
+      padding-right: 2px
+    &--2
+      color: cadetblue
+      padding-right: 2px
+
+  &__body
+    padding-left: 6px
+
+    display: flex
+    flex-direction: column
+    
+    flex: 1
+
+    &--0
+      border-left: 3px solid tomato
+    &--1
+      border-left: 3px solid orange
+    &--2
+      border-left: 3px solid cadetblue   
+
+  &__place
+    font-size: 10px
+    margin-bottom: 4px
+  
+  &__subject
+    font-weight: bold
+
+  &__fromWhoms
+    margin-top: 4px
+    font-size: 10px
+    color: var(--accent)
+
+    display: flex
+    flex-wrap: wrap
+    
+    width: 100%
+    &-item
+      &:active
+        opacity: 0.6
+      &
+        margin-right: 4px
+
+  &__after
+    // border: 1px solid violet
+
+  & ~ &
+    margin-top: 8px

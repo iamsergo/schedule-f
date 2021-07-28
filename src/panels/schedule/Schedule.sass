@@ -1,0 +1,37 @@
+.schedule
+  &__wrapper    
+    display: flex
+    flex-direction: column
+    justify-content: flex-end
+
+    height: calc(100vh - 64px)
+
+    .vkuiTabsItem__in
+      font-size: 11px
+      padding: 8px 0
+    .vkuiHeader__main
+      margin: 12px auto 0 !important
+
+  &__card
+    flex: 1
+    overflow: hidden
+    .vkuiGallery__slide
+      overflow: auto
+      padding: 0 4px
+
+  &__body
+    padding: 8px 0
+    height: initial
+
+.vkuiPanel--ios
+  .schedule
+    &__wrapper
+      height: calc(100vh - var(--panelheader_height_ios))
+
+.vkuiPanel#schedule
+  .vkuiPanel__in
+    // background: url(https://blog.1a23.com/wp-content/uploads/sites/2/2020/02/Desktop.png)
+    background-attachment: fixed
+    background-size: cover
+  .vkuiPanelHeader__in
+    background: transparent
