@@ -1,52 +1,64 @@
 import React from 'react'
-import { Avatar, Button, Card, Cell, CellButton, Div, Header, Panel, Placeholder, Progress, Separator, Spinner } from '@vkontakte/vkui'
-import { Icon28Search, Icon28SettingsOutline, Icon28ChevronDownOutline, Icon28ChevronUpOutline, Icon56GhostOutline } from '@vkontakte/icons';
-import { DayRange, HrefTitle, PanelProps } from '../../types'
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  Avatar,
+  Button,
+  Card,
+  Cell,
+  CellButton,
+  Div,
+  Header,
+  IconButton,
+  Panel,
+  PanelHeader,
+  Placeholder,
+  Progress,
+  Separator,
+  Snackbar,
+  Spinner,
+} from '@vkontakte/vkui'
+import {
+  Icon28Search,
+  Icon28SettingsOutline,
+  Icon28ChevronDownOutline,
+  Icon28ChevronUpOutline,
+  Icon28DeleteOutline,
+  Icon28AddOutline,
+  Icon28EducationOutline,
+  Icon28ArrowUpOutline,
+  Icon28ArrowDownOutline,
+  
+} from '@vkontakte/icons';
+import { PanelProps } from '../../types'
+import { useSelector } from 'react-redux';
 import { setActivePanel } from '../../store/slices/navigation';
 import { SCHEDULE_PANEL, SEARCH_PANEL, SETTINGS_PANEL } from '../../constants';
-import { requestGetUser, setUserData } from '../../store/slices/user';
+import { requestDeleteUserSchedule, requestGetUser } from '../../store/slices/user';
 import { requestConfigUnivers } from '../../store/slices/config';
 import { RootState } from '../../store/rootReducer';
-import { getFromWhomsList, getLessonsInDay } from '../../utils';
+import { getFromWhomsList, getLessonsInDay, isCurrentWeek, isPassWeek } from '../../utils';
 import { requestSchedule } from '../../store/slices/schedule';
-import LessonRow from '../../components/LessonRow';
 import ScheduleBody from '../../components/ScheduleBody';
+import { useAppDispatch } from '../../store';
+import Qoute from '../../components/Qoute';
 
 const MainPanel: React.FC<PanelProps> = ({
   id,
 }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const {
     user,
-    userData,
     isLoading: isUserLoading,
     error: userError,
   } = useSelector((s: RootState) => s.user)
   const {
-    univerList,
+    currentUniver,
+    currentWeek,
+    currentDay,
+    toEndDays,
+    toEndPercent,
     isLoading: isConfigLoading,
     error: configError,
   } = useSelector((s: RootState) => s.config)
-
-  const [fromWhomsIsOpen, setFromWhomsIsOpen] = React.useState(false)
-
-  React.useEffect(() => {
-    const initApp = async () => {
-      const userData: {
-        id: number, photo: string, firstName: string,
-      } = await new Promise(resolve => resolve({
-        id: 17,
-        photo: 'https://sun1-47.userapi.com/s/v1/if1/rZaP9yNeo5XSRcmxpjPfFeQdRGW-WBW4U8IqAc8ZZr83zWfF8Gvyd3R9sP-76g6aWjl-M7C5.jpg?size=50x0&quality=96&crop=194,89,1034,1034&ava=1',
-        firstName: 'Татьяна'
-      }))
-      dispatch(setUserData(userData))
-      dispatch(requestGetUser(userData.id))
-      dispatch(requestConfigUnivers())
-    }
-
-    if(!user) initApp()
-  },[])
 
   const goToSearchSchedule = () => {
     dispatch(setActivePanel(SEARCH_PANEL))
@@ -64,6 +76,10 @@ const MainPanel: React.FC<PanelProps> = ({
     dispatch(setActivePanel(SCHEDULE_PANEL))
   }
 
+  const deleteSchedule = () => {
+    dispatch(requestDeleteUserSchedule(user!.id))
+  }
+
   const tryAgain = () => {
     if(userError && user)
     {
@@ -75,8 +91,19 @@ const MainPanel: React.FC<PanelProps> = ({
     }
   }
 
+  const [fromWhomsIsOpen, setFromWhomsIsOpen] = React.useState(false)
   const toggleFromWhoms = () => {
     setFromWhomsIsOpen(!fromWhomsIsOpen)
+  }
+
+  const [weeksIsOpen, setWeeksIsOpen] = React.useState(false)
+  const toggleWeeks = () => {
+    setWeeksIsOpen(!weeksIsOpen)
+  }
+
+  const [timeLessonsIsOpen, setTimeLessonsIsOpen] = React.useState(false)
+  const toggleTimeLessons = () => {
+    setTimeLessonsIsOpen(!timeLessonsIsOpen)
   }
   
   let content
@@ -105,19 +132,20 @@ const MainPanel: React.FC<PanelProps> = ({
   else if(user)
   {
     let univerContent
-    if(user.univer)
+    if(user.univer && currentUniver)
     {
-      univerContent = (
+      univerContent = (<>
+        {/* <Qoute photo="" name="Величайший">Силен не тот, а этот</Qoute> */}
+        {/* <Separator/> */}
+
         <Div>
           <Card>
             <Header
-              subtitle={`До конца семестра ${17} дн.`}
-            >
-              {true ? 'Числитель' : 'Знаменатель'}
-            </Header>
+              subtitle={`До конца семестра ${toEndDays} дн. (${new Date(currentUniver.endDate).toLocaleDateString()})`}
+            >{currentWeek ? 'Числитель' : 'Знаменатель'}</Header>
             <Progress
               style={{margin: '0px 12px', background: 'gray'}}
-              value={(60 / 100) * 100}
+              value={toEndPercent}
             />
             <br />
             <Separator />
@@ -128,30 +156,53 @@ const MainPanel: React.FC<PanelProps> = ({
             >Искать расписание</Cell>
           </Card>
         </Div>
+      </>)
+    }
+
+    if(!user.univer)
+    {
+      univerContent = (
+        <Placeholder
+          stretched
+          icon={<Icon28EducationOutline width={64} height={64}/>}
+          action={<Button onClick={goToSettings}>Выбрать</Button>}
+        >Выберите университет, чтобы пользоваться приложением</Placeholder>
       )
     }
 
     let scheduleContent
     if(user.schedule)
     {
-      const currentDay = 0 as DayRange
-      const currentWeek = 0
       const lessonsToday = getLessonsInDay(user.schedule.lessons, currentDay, currentWeek)
+      const DAYS = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота']
+      const todayString = `${DAYS[currentDay]}, ${new Date().toLocaleDateString()}`
 
       scheduleContent = (<>
-        {lessonsToday.length !== 0 &&
-          <Div style={{paddingTop:0}}>
-            <Card>
-              <Header
-                subtitle={`ПН, 17 июня`}
-              >Расписание на сегодня</Header>
-              <ScheduleBody lessons={lessonsToday} onGoToSchedule={goToSchedule} />
-              <CellButton
-                onClick={() => goToSchedule(user.schedule!.href)}
-              >Полное расписание</CellButton>
-            </Card>
-          </Div>
-        }
+        <Div style={{paddingTop:0}}>
+          <Card>
+            <Cell
+              disabled
+              after={
+                <IconButton>
+                  <Icon28DeleteOutline fill="tomato" onClick={deleteSchedule}/>
+                </IconButton>
+              }
+            >{user.schedule.title}</Cell>
+            <Separator/>
+
+            <Header subtitle={todayString}>
+              Расписание на сегодня
+            </Header>
+            <div style={{padding:'0px 8px'}}>
+              <ScheduleBody today lessons={lessonsToday} onGoToSchedule={goToSchedule} />
+            </div>
+            <br/><Separator/>
+            
+            <CellButton
+              onClick={() => goToSchedule(user.schedule!.href)}
+            >Полное расписание</CellButton>
+          </Card>
+        </Div>
         <Div style={{paddingTop:0}}>
           <Card>
             <Cell
@@ -168,25 +219,93 @@ const MainPanel: React.FC<PanelProps> = ({
         </Div>
       </>)
     }
+    
+    if(user.univer && !user.schedule)
+    {
+      scheduleContent = (
+        <Div style={{paddingTop:0}}>
+          <Card>
+            <Cell
+              after={<Icon28AddOutline fill="orange"/>}
+              onClick={goToSearchSchedule}
+            >Расписание не выбрано</Cell>
+          </Card>
+        </Div>
+      )
+    }
+
+    let univerInfoContent
+    if(currentUniver)
+    {
+      univerInfoContent = (<>
+        <Separator/>
+        <Div>
+          <Card>
+            <Cell
+              onClick={toggleWeeks}
+              after={!weeksIsOpen ? <Icon28ChevronDownOutline /> : <Icon28ChevronUpOutline/>}
+            >Учебные недели</Cell>
+            {weeksIsOpen && <Separator/>}
+            {weeksIsOpen && currentUniver.weeks.map((week, i) => {
+              const startRangString = new Date(week.range[0]).toLocaleDateString()
+              const endRangeString = new Date(week.range[1]).toLocaleDateString()
+              const rangeString = startRangString + ' - ' + endRangeString
+              
+              const weekPassed = isPassWeek(week.range[1])
+
+              return <Cell
+                key={i}
+                disabled
+                description={rangeString}
+                after={
+                  week.weekType === 0
+                    ? <Icon28ArrowUpOutline fill={isCurrentWeek(week) ? 'tomato' : 'teal'}/>
+                    : <Icon28ArrowDownOutline fill={isCurrentWeek(week) ? 'tomato' : 'violet'}/>
+                }
+              >
+                <span style={{
+                  textDecoration: weekPassed ? 'line-through': 'none',
+                  opacity: weekPassed ? 0.5 : 1,
+                  color: isCurrentWeek(week) ? 'tomato' : '',
+                }}>
+                  {week.weekType === 0?'Числитель':'Знаменатель'}
+                </span>
+              </Cell>
+            })}
+          </Card>
+        </Div>
+        <Div style={{paddingTop:0}}>
+          <Card>
+            <Cell
+              onClick={toggleTimeLessons}
+              after={!timeLessonsIsOpen ? <Icon28ChevronDownOutline /> : <Icon28ChevronUpOutline/>}
+            >Время занятий</Cell>
+            {timeLessonsIsOpen && <Separator/>}
+            {timeLessonsIsOpen && currentUniver.timeLessons.map((time, i) => {
+              return <Cell
+                key={i}
+                disabled
+                description={`${i+1} пара`}
+              >{time}</Cell>
+            })}
+          </Card>
+        </Div>
+      </>)
+    }
 
     content = (<>
-      <Div>
-        <Card>
-          <Cell
-            disabled
-            before={<Avatar src={userData!.photo} />}
-            after={<Icon28SettingsOutline onClick={goToSettings}/>}
-            description={user.univer ? user.univer.subtitle : 'Университет не выбран'}
-          >{userData!.firstName}</Cell>
-        </Card>
-      </Div>
       {univerContent}
       {scheduleContent}
+      {univerInfoContent}
     </>)
   }
 
   return (
-    <Panel id={id} style={{paddingTop: 64}}>
+    <Panel id={id}>
+      <PanelHeader
+        separator={false}
+        left={!(isUserLoading || isConfigLoading) && user?.univer && <Icon28SettingsOutline onClick={goToSettings}/>}
+      />
       {content}
     </Panel>
   )

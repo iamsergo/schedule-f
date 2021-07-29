@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../api";
-import { UniverData } from "../../types";
+import { DayRange, Univer, WeekRange, WeekTypeRange } from "../../types";
+import { getCurrentDay, getCurrentWeek, getDaysStats } from "../../utils";
 
 type ConfigState = {
   isLoading: boolean
@@ -8,13 +9,31 @@ type ConfigState = {
     message: string
     payload: any
   } | null
-  univerList: UniverData[]
+  univerList: Univer[]
+  currentUniver: Univer | null
+  
+  passDays: number
+  countDays: number
+  toEndDays: number
+  toEndPercent: number
+  currentDay: DayRange
+  currentWeek: WeekRange
+  config: { [key:string]: boolean }
 }
 
 const initialState: ConfigState = {
   isLoading: false,
   error: null,
   univerList: [],
+  currentUniver: null,
+
+  passDays: 0,
+  countDays: 0,
+  toEndDays: 0,
+  toEndPercent: 0,
+  currentDay: 0,
+  currentWeek: 0,
+  config: {}
 }
 
 export const requestConfigUnivers = createAsyncThunk(
@@ -25,11 +44,39 @@ export const requestConfigUnivers = createAsyncThunk(
 const configSlice = createSlice({
   name: 'config',
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentUniver(state, action)
+    {
+      let currentUniver = action.payload
+      if(!currentUniver)
+      {
+        state.currentUniver = null
+        return
+      }
+      
+      currentUniver = state.univerList.find(univer => univer.id === currentUniver.id)
+      state.currentUniver = currentUniver
+      state.currentDay = getCurrentDay()
+      state.currentWeek = getCurrentWeek(currentUniver.weeks)
+
+      const { passDays, countDays, toEndDays } = getDaysStats(
+        currentUniver.startDate,
+        currentUniver.endDate,
+      )
+      state.countDays = countDays
+      state.passDays = passDays
+      state.toEndDays = toEndDays
+      state.toEndPercent = passDays / countDays * 100
+    },
+    setConfig(state,action)
+    {
+      state.config = action.payload
+    },
+  },
   extraReducers(builder)
   {
     builder
-      .addCase(requestConfigUnivers.pending, (state,action) => {
+      .addCase(requestConfigUnivers.pending, (state) => {
         state.isLoading = true
         state.error = null
       })
@@ -48,5 +95,5 @@ const configSlice = createSlice({
   },
 })
 
-export const {} = configSlice.actions
+export const { setCurrentUniver, setConfig } = configSlice.actions
 export default configSlice.reducer

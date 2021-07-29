@@ -25,7 +25,9 @@ const searchSchedule = async ({
   return await res.json()
 }
 
-export default {
+const schedule = {
   getSchedule,
   searchSchedule,
 }
+
+export default schedule

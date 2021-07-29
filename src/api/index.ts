@@ -2,8 +2,10 @@ import schedule from './schedule'
 import config from './config'
 import user from './user'
 
-export default {
+const api = {
   schedule,
   config,
   user,
 }
+
+export default api

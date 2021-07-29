@@ -1,3 +1,4 @@
+import React from "react";
 import { MAIN_PANEL, SCHEDULE_PANEL, SEARCH_PANEL, SETTINGS_PANEL } from "../constants";
 
 export type PanelType =
@@ -8,6 +9,7 @@ export type PanelType =
 
 export type PanelProps = {
   id: PanelType
+  setPopout?: (popout: React.ReactNode) => void
 }
 
 
@@ -37,12 +39,23 @@ export type Schedule = {
   lessons: Lesson[]
 }
 
-export type UniverData = {
+export type WeekTypeRange = {
+  range: number[]
+  weekType: WeekRange
+}
+
+export type Univer = {
   id: number
   title: string
   subtitle: string
   code: string
   baseUrl: string
+  startDateStartOfWeek: number
+  startDate: number
+  firstWeekType: number
+  endDate: number
+  weeks: WeekTypeRange[]
+  timeLessons: string[]
 }
 
 export type User = {
@@ -56,4 +69,15 @@ export type UserData = {
   photo: string
   firstName: string
   lastName: string
+}
+
+export type StatsRecord = {
+  pass: number
+  total: number
+}
+
+export type Stats = {
+  lec: StatRecord
+  lab: StatRecord
+  pr: StatRecord
 }

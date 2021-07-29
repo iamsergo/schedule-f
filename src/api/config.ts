@@ -1,12 +1,14 @@
 import { BASE_URL } from "../constants"
-import { UniverData } from "../types"
+import { Univer } from "../types"
 
-const getUniverList = async (): Promise<UniverData[]> => {
-  const url = [ BASE_URL, 'config/univers'].join('/')
+const getUniverList = async (): Promise<Univer[]> => {
+  const url = [ BASE_URL, 'univers'].join('/')
   const res = await fetch(url)
   return await res.json()
 }
 
-export default {
+const config = {
   getUniverList,
 }
+
+export default config

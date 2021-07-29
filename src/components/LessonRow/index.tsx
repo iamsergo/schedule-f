@@ -1,19 +1,22 @@
-import { Panel } from '@vkontakte/vkui'
 import React from 'react'
 import { Lesson } from '../../types'
 import './LessonRow.sass'
 
 type LessonRowProps = {
+  current: boolean
   lesson: Lesson
   onGoToSchedule: (href: string) => void
+  getStats?: () => void
 }
 
 const LessonRow: React.FC<LessonRowProps> = ({
+  current,
   lesson,
   onGoToSchedule,
+  getStats,
 }) => {
   return (
-    <div className="lesson-row">
+    <div className={`lesson-row${current ? ' lesson-row--current' : ''}`}>
       <div className="lesson-row__time">
         {lesson.time.map((time, i) => {
           return <div
@@ -29,7 +32,7 @@ const LessonRow: React.FC<LessonRowProps> = ({
           </span>
           {lesson.place}
         </div>
-        <div className="lesson-row__subject">
+        <div onClick={() => getStats && getStats()} className="lesson-row__subject">
           {lesson.subject}
         </div>
         <div className="lesson-row__fromWhoms">

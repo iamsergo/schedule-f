@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { HrefTitle, Schedule } from "../../types"
+import { HrefTitle, Schedule, Stats } from "../../types"
 import api from "../../api"
 import { RootState } from "../rootReducer"
 
@@ -15,9 +15,15 @@ type ScheduleState = {
     payload: any,
   } | null
   schedule: Schedule | null
+  lessonStats: {
+    title: string
+    stats: Stats
+    fromWhoms: HrefTitle[]
+  } | null
   scheduleHistory: ScheduleHistoryRecord[]
   scheduleHistoryHrefs: string[]
 
+  q: string
   isSearchLoading: boolean
   searchError: {
     message: string,
@@ -34,11 +40,19 @@ export const requestSchedule = createAsyncThunk(
   }, thunkAPI): Promise<{record: ScheduleHistoryRecord, isUniq: boolean }> => {
     const state = (thunkAPI.getState() as RootState)
     const scheduleHistory = state.schedule.scheduleHistory
+    const userSchedule = state.user.user?.schedule
+    
     const schedule = scheduleHistory.find(schedule => schedule.id === href)
-
     if(schedule)
     {
       return { record: schedule, isUniq: false}
+    }
+    else if(userSchedule && userSchedule.href === href)
+    {
+      return {
+        record: { id: href, data: userSchedule },
+        isUniq: true,
+      }
     }
     else
     {
@@ -60,9 +74,11 @@ const initialState: ScheduleState = {
   isLoading: false,
   error: null,
   schedule: null,
+  lessonStats: null,
   scheduleHistory: [],
   scheduleHistoryHrefs: [],
 
+  q: '',
   isSearchLoading: false,
   searchError: null,
   searchedSchedules: [],
@@ -91,11 +107,19 @@ const scheduleSlice = createSlice({
       state.scheduleHistoryHrefs = []
       state.schedule = null
     },
+    clearSearchedSchedules(state)
+    {
+      state.searchedSchedules = []
+    },
+    setLessonStats(state,action)
+    {
+      state.lessonStats = action.payload
+    },
   },
   extraReducers(builder)
   {
     builder
-      .addCase(requestSchedule.pending, (state,action) => {
+      .addCase(requestSchedule.pending, (state) => {
         state.isLoading = true
         state.error = null
       })
@@ -121,7 +145,7 @@ const scheduleSlice = createSlice({
         state.schedule = record.data
       })
 
-      .addCase(requestSearchSchedule.pending, (state,action) => {
+      .addCase(requestSearchSchedule.pending, (state) => {
         state.isSearchLoading = true
         state.searchError = null
       })
@@ -140,5 +164,10 @@ const scheduleSlice = createSlice({
   },
 })
 
-export const { scheduleHistoryBack, clearScheduleHistory, } = scheduleSlice.actions
+export const {
+  scheduleHistoryBack,
+  clearScheduleHistory,
+  clearSearchedSchedules,
+  setLessonStats,
+} = scheduleSlice.actions
 export default scheduleSlice.reducer
