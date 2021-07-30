@@ -31,7 +31,7 @@ import { PanelProps } from '../../types'
 import { useSelector } from 'react-redux';
 import { setActivePanel } from '../../store/slices/navigation';
 import { SCHEDULE_PANEL, SEARCH_PANEL, SETTINGS_PANEL } from '../../constants';
-import { requestDeleteUserSchedule, requestGetUser } from '../../store/slices/user';
+import { requestDeleteUserSchedule, requestGetUser, setIsLoaderShowing } from '../../store/slices/user';
 import { requestConfigUnivers } from '../../store/slices/config';
 import { RootState } from '../../store/rootReducer';
 import { getFromWhomsList, getLessonsInDay, isCurrentWeek, isPassWeek } from '../../utils';
@@ -46,6 +46,7 @@ const MainPanel: React.FC<PanelProps> = ({
 }) => {
   const dispatch = useAppDispatch()
   const {
+    isLoaderShowing,
     user,
     isLoading: isUserLoading,
     error: userError,
@@ -106,9 +107,8 @@ const MainPanel: React.FC<PanelProps> = ({
     setTimeLessonsIsOpen(!timeLessonsIsOpen)
   }
   
-  const [isLoaderShowing, setIsLoaderShowing] = React.useState(true)
   const hideLoader = () => {
-    setIsLoaderShowing(false)
+    dispatch(setIsLoaderShowing(false))
   }
 
   let content

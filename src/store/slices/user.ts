@@ -12,10 +12,12 @@ type ConfigState = {
   } | null
   user: User | null
   userData: UserData | null
+  isLoaderShowing: boolean
 }
 
 const initialState: ConfigState = {
   isLoading: false,
+  isLoaderShowing: true,
   isUniverLoading: false,
   isScheduleLoading: false,
   error: null,
@@ -55,6 +57,10 @@ const userSlice = createSlice({
     setUserData(state, action)
     {
       state.userData = action.payload
+    },
+    setIsLoaderShowing(state, action)
+    {
+      state.isLoaderShowing = action.payload
     },
   },
   extraReducers(builder)
@@ -147,5 +153,5 @@ const userSlice = createSlice({
   },
 })
 
-export const { setUserData } = userSlice.actions
+export const { setUserData, setIsLoaderShowing } = userSlice.actions
 export default userSlice.reducer

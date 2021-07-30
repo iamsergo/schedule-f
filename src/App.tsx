@@ -24,6 +24,7 @@ const App: React.FC = () => {
   const dispatch = useDispatch()
   const { activePanel, history } = useSelector((s: RootState) => s.navigation)
   const {
+    isLoaderShowing,
     user,
     isLoading: isUserLoading,
     error: userError,
@@ -109,13 +110,14 @@ const App: React.FC = () => {
     
     if(
       !isConfigLoading && !isUserLoading && !isFirstLoading &&
-      !userError && !configError
+      !userError && !configError &&
+      !isLoaderShowing
     )
     {
       openModal()      
     }
     isFirstLoading = false
-  }, [isConfigLoading, isUserLoading])
+  }, [isConfigLoading, isUserLoading, isLoaderShowing])
 
   return (
     <ConfigProvider isWebView={true}>
