@@ -13,7 +13,6 @@ import {
   Placeholder,
   Progress,
   Separator,
-  Snackbar,
   Spinner,
 } from '@vkontakte/vkui'
 import {
@@ -40,6 +39,7 @@ import { requestSchedule } from '../../store/slices/schedule';
 import ScheduleBody from '../../components/ScheduleBody';
 import { useAppDispatch } from '../../store';
 import Qoute from '../../components/Qoute';
+import Loader from '../../components/Loader';
 
 const MainPanel: React.FC<PanelProps> = ({
   id,
@@ -106,14 +106,15 @@ const MainPanel: React.FC<PanelProps> = ({
     setTimeLessonsIsOpen(!timeLessonsIsOpen)
   }
   
+  const [isLoaderShowing, setIsLoaderShowing] = React.useState(true)
+  const hideLoader = () => {
+    setIsLoaderShowing(false)
+  }
+
   let content
-  if(isUserLoading || isConfigLoading)
+  if(isUserLoading || isConfigLoading || isLoaderShowing)
   {
-    content = (
-      <div style={{height:'80vh'}}>
-        <Spinner/>
-      </div>
-    )
+    content = <Loader isEnd={!isUserLoading && !isConfigLoading} onHide={hideLoader} />
   }
   else if(userError || configError)
   {
@@ -304,7 +305,7 @@ const MainPanel: React.FC<PanelProps> = ({
     <Panel id={id}>
       <PanelHeader
         separator={false}
-        left={!(isUserLoading || isConfigLoading) && user?.univer && <Icon28SettingsOutline onClick={goToSettings}/>}
+        left={!(isUserLoading || isConfigLoading || isLoaderShowing) && user?.univer && <Icon28SettingsOutline onClick={goToSettings}/>}
       />
       {content}
     </Panel>
