@@ -26,6 +26,9 @@
     &--2
       color: cadetblue
       padding-right: 2px
+    &--3
+      color: tan
+      padding-right: 2px
 
   &__body
     padding-left: 6px
@@ -40,7 +43,9 @@
     &--1
       border-left: 3px solid orange
     &--2
-      border-left: 3px solid cadetblue   
+      border-left: 3px solid cadetblue 
+    &--3
+      border-left: 3px solid tan   
 
   &__place
     font-size: 10px
@@ -49,21 +54,23 @@
   
   &__subject
     font-weight: bold
+    font-size: 13px
+    padding-right: 4px
 
   &__fromWhoms
     margin-top: 4px
     font-size: 10px
-    color: var(--accent)
+    color: gray
 
     display: flex
     flex-wrap: wrap
     
     width: 100%
-    &-item
+    &-item.link
+      color: var(--accent)
+      margin-right: 4px
       &:active
         opacity: 0.6
-      &
-        margin-right: 4px
 
   &__after
     // border: 1px solid violet

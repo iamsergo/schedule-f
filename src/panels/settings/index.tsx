@@ -74,8 +74,6 @@ const SettingsPanel: React.FC<PanelProps> = ({
               value={univer.id}
               >{univer.subtitle}</option>
             })}
-            <option value="1">БГТУ</option>
-            <option value="2">РГТУ</option>
           </NativeSelect>
         </FormItem>
         <Div style={{paddingTop:0}}>

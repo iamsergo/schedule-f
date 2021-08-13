@@ -26,21 +26,23 @@ const LessonRow: React.FC<LessonRowProps> = ({
         })}
       </div>
       <div className={`lesson-row__body lesson-row__body--${lesson.type}`}>
-        <div className="lesson-row__place">
-          <span className={`lesson-row__type-title--${lesson.type}`}>
-            {lesson.typeTitle}
-          </span>
-          {lesson.place}
-        </div>
+        {lesson.typeTitle &&
+          <div className="lesson-row__place">
+            <span className={`lesson-row__type-title--${lesson.type}`}>
+              {lesson.typeTitle}
+            </span>
+            {lesson.place}
+          </div>
+        }
         <div onClick={() => getStats && getStats()} className="lesson-row__subject">
-          {lesson.subject}
+          {lesson.subject} {lesson.group !== 2 && `(${lesson.group+1}гр.)`}
         </div>
         <div className="lesson-row__fromWhoms">
           {lesson.fromWhoms.map(fromWhom => {
             return <div
               key={fromWhom.href}
-              className="lesson-row__fromWhoms-item"
-              onClick={() => onGoToSchedule(fromWhom.href)}
+              className={`lesson-row__fromWhoms-item${!fromWhom.href ? '' : ' link'}`}
+              onClick={() => fromWhom.href && onGoToSchedule(fromWhom.href)}
             >{fromWhom.title}</div>
           })}
         </div>
