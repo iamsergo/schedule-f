@@ -8,7 +8,8 @@ const getSchedule = async ({
   univer: string,
   tail: string,
 }): Promise<Schedule> => {
-  const url = [ BASE_URL, 'schedule', univer, tail, ].join('/')
+  const queryTail = new URLSearchParams(`tail=${tail}`).toString()
+  const url = [BASE_URL, "schedule", univer].join("/") + '?' + queryTail
   const res = await fetch(url)
   return await res.json()
 }
