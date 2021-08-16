@@ -112,9 +112,10 @@ const MainPanel: React.FC<PanelProps> = ({
   }
 
   let content
-  if(isUserLoading || isConfigLoading || isLoaderShowing)
+  if(isUserLoading || isConfigLoading)// || isLoaderShowing)
   {
-    content = <Loader isEnd={!isUserLoading && !isConfigLoading} onHide={hideLoader} />
+    // content = <Loader isEnd={!isUserLoading && !isConfigLoading} onHide={hideLoader} />
+    content = <Spinner style={{paddingTop:'20vh'}} />
   }
   else if(userError || configError)
   {
@@ -305,7 +306,8 @@ const MainPanel: React.FC<PanelProps> = ({
     <Panel id={id}>
       <PanelHeader
         separator={false}
-        left={!(isUserLoading || isConfigLoading || isLoaderShowing) && user?.univer && <Icon28SettingsOutline onClick={goToSettings}/>}
+        // left={!(isUserLoading || isConfigLoading || isLoaderShowing) && user?.univer && <Icon28SettingsOutline onClick={goToSettings}/>}
+        left={!(isUserLoading || isConfigLoading) && user?.univer && <Icon28SettingsOutline onClick={goToSettings}/>}
       />
       {content}
     </Panel>

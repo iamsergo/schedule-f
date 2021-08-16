@@ -2,6 +2,7 @@ import React from 'react'
 import start from '../../assets/start.gif'
 import pause from '../../assets/pause.gif'
 import end from '../../assets/end.gif'
+import loading from '../../assets/loading.gif'
 import './Loader.sass'
 
 type LoaderProps = {
@@ -36,7 +37,7 @@ const Loader: React.FC<LoaderProps> = ({
   return (
     <div className="loader-wrapper">
       <div className="loader-img-wrapper">
-        <img src={src} alt="oops..."/>
+        <img src={loading} alt="oops..."/>
       </div>
     </div>
   )

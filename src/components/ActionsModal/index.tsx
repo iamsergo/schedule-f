@@ -54,7 +54,7 @@ const ActionsModal = () => {
           <Div style={{paddingTop:'0px 12px'}}>
             {currentUniver &&
               <Caption level="2" weight="regular" style={{opacity:0.5}}>
-                Пожалуйста, не воспринимайте данную статистику, буквально!
+                Пожалуйста, не воспринимайте данную статистику буквально!
                 Т.к. для расчета, первым днем принят {new Date(currentUniver.startDateStartOfWeek).toLocaleDateString()},
                 а последним {new Date(currentUniver.endDate).toLocaleDateString()}.
               </Caption>
