@@ -50,7 +50,7 @@ const SearchPanel: React.FC<PanelProps> = ({
   React.useEffect(() => {
     const timeout = window.setTimeout(() => {
       setDebQ(q)
-    }, 300)
+    }, 500)
 
     return () => {
       window.clearTimeout(timeout)

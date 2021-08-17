@@ -16,7 +16,7 @@ import SettingsPanel from './panels/settings';
 import { RootState } from './store/rootReducer';
 import ActionsModal from './components/ActionsModal';
 import { requestGetUser, setUserData } from './store/slices/user';
-import { requestConfigUnivers, setConfig, setCurrentUniver } from './store/slices/config';
+import { requestConfigUnivers, requestQoute, setConfig, setCurrentUniver } from './store/slices/config';
 import { setActiveModal } from './store/slices/navigation';
 
 let isFirstLoading = true
@@ -60,6 +60,7 @@ const App: React.FC = () => {
       dispatch(setUserData(userData))
       dispatch(requestConfigUnivers())
       dispatch(requestGetUser(userData.id))
+      dispatch(requestQoute())
     }
 
     if(!user) initApp()

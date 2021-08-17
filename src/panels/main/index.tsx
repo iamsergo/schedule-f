@@ -59,6 +59,7 @@ const MainPanel: React.FC<PanelProps> = ({
     toEndPercent,
     isLoading: isConfigLoading,
     error: configError,
+    qoute,
   } = useSelector((s: RootState) => s.config)
 
   const goToSearchSchedule = () => {
@@ -137,8 +138,10 @@ const MainPanel: React.FC<PanelProps> = ({
     if(user.univer && currentUniver)
     {
       univerContent = (<>
-        {/* <Qoute photo="" name="Величайший">Силен не тот, а этот</Qoute> */}
-        {/* <Separator/> */}
+        {qoute && <>
+          <Qoute qoute={qoute} />
+          <Separator/>
+        </>}
 
         <Div>
           <Card>

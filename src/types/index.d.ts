@@ -81,3 +81,10 @@ export type Stats = {
   lab: StatRecord
   pr: StatRecord
 }
+
+export type Qoute = {
+  text : string
+  author: string
+  day : number
+  color: string
+}

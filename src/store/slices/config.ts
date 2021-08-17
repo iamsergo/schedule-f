@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../api";
-import { DayRange, Univer, WeekRange, WeekTypeRange } from "../../types";
+import { DayRange, Qoute, Univer, WeekRange } from "../../types";
 import { getCurrentDay, getCurrentWeek, getDaysStats } from "../../utils";
 
 type ConfigState = {
@@ -19,6 +19,8 @@ type ConfigState = {
   currentDay: DayRange
   currentWeek: WeekRange
   config: { [key:string]: boolean }
+
+  qoute: Qoute | null
 }
 
 const initialState: ConfigState = {
@@ -33,8 +35,15 @@ const initialState: ConfigState = {
   toEndPercent: 0,
   currentDay: 0,
   currentWeek: 0,
-  config: {}
+  config: {},
+
+  qoute: null,
 }
+
+export const requestQoute = createAsyncThunk(
+  'qoute/request',
+  api.qoute.getQoute,
+)
 
 export const requestConfigUnivers = createAsyncThunk(
   'config/univers',
@@ -91,6 +100,14 @@ const configSlice = createSlice({
         state.isLoading = false
         state.error = null
         state.univerList = action.payload
+      })
+
+      .addCase(requestQoute.pending, state => {
+        state.isLoading = true
+      })
+      .addCase(requestQoute.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.qoute = action.payload as Qoute | null
       })
   },
 })

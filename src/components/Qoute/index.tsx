@@ -1,33 +1,26 @@
 import React from 'react'
-import { Icon28Like, Icon28LikeOutline } from '@vkontakte/icons'
+import { Icon28ChevronDownOutline, Icon28ChevronUpOutline, Icon28Like, Icon28LikeOutline } from '@vkontakte/icons'
 import { Avatar, Card, Cell, Div, IconButton } from '@vkontakte/vkui'
+import { Qoute as QouteType } from '../../types'
 
 type QouteProps = {
-  photo: string
-  name: string
+  qoute: QouteType
 }
 
 const Qoute: React.FC<QouteProps> = ({
-  photo,
-  name,
-  children,
+  qoute,
 }) => {
+  const [isOpen, setIsOpen] = React.useState(false)
+
   return (
     <Div>
       <Card>
         <Cell
-          disabled
-          before={<Avatar size={36} src={photo} />}
-          after={
-            <IconButton>
-              {true
-                ? <Icon28Like fill="tomato"/>
-                : <Icon28LikeOutline/>}
-            </IconButton>
-          }
+          onClick={()=>setIsOpen(!isOpen)}
           description="Цитата дня"
-        >{name}</Cell>
-        <Div style={{paddingTop:0}}>{children}</Div>
+          after={!isOpen ? <Icon28ChevronDownOutline/> : <Icon28ChevronUpOutline/>}
+        >{qoute.author}</Cell>
+        {isOpen && <Div style={{paddingTop:4}}>{qoute.text}</Div>}
       </Card>
     </Div>
   )
