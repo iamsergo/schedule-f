@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Avatar,
   Button,
   Card,
   Cell,
@@ -39,14 +38,12 @@ import { requestSchedule } from '../../store/slices/schedule';
 import ScheduleBody from '../../components/ScheduleBody';
 import { useAppDispatch } from '../../store';
 import Qoute from '../../components/Qoute';
-import Loader from '../../components/Loader';
 
 const MainPanel: React.FC<PanelProps> = ({
   id,
 }) => {
   const dispatch = useAppDispatch()
   const {
-    isLoaderShowing,
     user,
     isLoading: isUserLoading,
     error: userError,
@@ -107,15 +104,10 @@ const MainPanel: React.FC<PanelProps> = ({
   const toggleTimeLessons = () => {
     setTimeLessonsIsOpen(!timeLessonsIsOpen)
   }
-  
-  const hideLoader = () => {
-    dispatch(setIsLoaderShowing(false))
-  }
 
   let content
-  if(isUserLoading || isConfigLoading)// || isLoaderShowing)
+  if(isUserLoading || isConfigLoading)
   {
-    // content = <Loader isEnd={!isUserLoading && !isConfigLoading} onHide={hideLoader} />
     content = <Spinner style={{paddingTop:'20vh'}} />
   }
   else if(userError || configError)
@@ -147,7 +139,7 @@ const MainPanel: React.FC<PanelProps> = ({
           <Card>
             <Header
               subtitle={`До конца семестра ${toEndDays} дн. (${new Date(currentUniver.endDate).toLocaleDateString()})`}
-            >{currentWeek ? 'Числитель' : 'Знаменатель'}</Header>
+            >{currentWeek ? 'Числитель(четная)' : 'Знаменатель(нечетная)'}</Header>
             <Progress
               style={{margin: '0px 12px', background: 'gray'}}
               value={toEndPercent}
@@ -273,7 +265,7 @@ const MainPanel: React.FC<PanelProps> = ({
                   opacity: weekPassed ? 0.5 : 1,
                   color: isCurrentWeek(week) ? 'tomato' : '',
                 }}>
-                  {week.weekType === 0?'Числитель':'Знаменатель'}
+                  {week.weekType === 0?'Числитель(четная)' : 'Знаменатель(нечетная)'}
                 </span>
               </Cell>
             })}
@@ -309,7 +301,6 @@ const MainPanel: React.FC<PanelProps> = ({
     <Panel id={id}>
       <PanelHeader
         separator={false}
-        // left={!(isUserLoading || isConfigLoading || isLoaderShowing) && user?.univer && <Icon28SettingsOutline onClick={goToSettings}/>}
         left={!(isUserLoading || isConfigLoading) && user?.univer && <Icon28SettingsOutline onClick={goToSettings}/>}
       />
       {content}

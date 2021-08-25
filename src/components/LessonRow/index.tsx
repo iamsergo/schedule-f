@@ -35,7 +35,6 @@ const LessonRow: React.FC<LessonRowProps> = ({
           </div>
         }
         <div onClick={() => getStats && getStats()} className="lesson-row__subject">
-        {/* <div onClick={()=>{}} className="lesson-row__subject"> */}
           {lesson.subject} {lesson.group !== 2 && `(${lesson.group+1}гр.)`}
         </div>
         <div className="lesson-row__fromWhoms">

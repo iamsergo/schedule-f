@@ -45,8 +45,8 @@ const DAYS = [
   { id: 5, title: 'СБ' },
 ]
 const WEEKS = [
-  { id: 0, title: 'Числитель'},
-  { id: 1, title: 'Знаменатель'},
+  { id: 0, title: 'Числитель ∧'},
+  { id: 1, title: 'Знаменатель ∨'},
 ]
 
 const SchedulePanel: React.FC<PanelProps> = ({

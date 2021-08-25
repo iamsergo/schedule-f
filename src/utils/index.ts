@@ -52,7 +52,7 @@ export const getDaysStats = (
   const passDays = Math.ceil((now - start) / DAYS)
   const toEndDays = Math.ceil((end - now) / DAYS)
 
-  return { passDays, countDays, toEndDays }
+  return { passDays: passDays < 0 ? 0 : passDays, countDays, toEndDays }
 }
 
 export const isPassWeek = (weekEnd: number): boolean => {
@@ -97,7 +97,7 @@ export const getStatsForLesson = ({
   currentUniver: Univer
 }): { stats: Stats, fromWhoms: HrefTitle[] } => {
   const { subject, time } = lesson
-  const { weeks } = currentUniver
+  const { weeks, startDate } = currentUniver
 
   const stats: Stats = {
     lec: {pass:0,total:0},
@@ -131,6 +131,19 @@ export const getStatsForLesson = ({
 
   const now = new Date()
   const nowMs = now.getTime()
+  const startMs = new Date(startDate).getTime()
+
+  if(nowMs - startMs < 0)
+  {
+    return {
+      fromWhoms: getFromWhomsList(thisLessons),
+      stats: {
+        lec: {pass:0,total:stats.lec.total},
+        pr: {pass:0,total:stats.pr.total},
+        lab: {pass:0,total:stats.lab.total},
+      }
+    }
+  }
 
   const currentWeekIdx = weeks.findIndex(w => {
     const [start, end] = w.range
