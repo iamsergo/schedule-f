@@ -31,7 +31,7 @@ import { DayRange, Lesson, PanelProps, WeekRange } from '../../types'
 import { getDiff, getLessonsInDay, getStatsForLesson } from '../../utils'
 import { clearScheduleHistory, requestSchedule, scheduleHistoryBack, setLessonStats } from '../../store/slices/schedule';
 import { setActiveModal, setActivePanel } from '../../store/slices/navigation';
-import { MAIN_PANEL } from '../../constants';
+import { MAIN_PANEL, SEARCH_PANEL } from '../../constants';
 import { requestDeleteUserSchedule, requestUpdateUserSchedule } from '../../store/slices/user';
 import ScheduleBody from '../../components/ScheduleBody';
 import './Schedule.sass'
@@ -57,6 +57,7 @@ const SchedulePanel: React.FC<PanelProps> = ({
   const { isLoading, error, schedule, scheduleHistoryHrefs, } = useSelector((s: RootState) => s.schedule)
   const { user } = useSelector((s: RootState) => s.user)
   const { currentUniver, currentDay, currentWeek } = useSelector((s: RootState) => s.config)
+  const { prevActivePanel } = useSelector((s: RootState) => s.navigation)
 
   const [activeDay, setActiveDay] = React.useState<DayRange>(currentDay)
   const [activeWeek, setActiveWeek] = React.useState<WeekRange>(currentWeek)
@@ -71,10 +72,16 @@ const SchedulePanel: React.FC<PanelProps> = ({
     dispatch(clearScheduleHistory())
   }
 
+  const goToSearch = () => {
+    dispatch(setActivePanel(SEARCH_PANEL))
+    dispatch(clearScheduleHistory())
+  }
+
   const goBack = () => {
     if(scheduleHistoryHrefs.length === 1)
     {
-      goToMain()
+      if(prevActivePanel === SEARCH_PANEL) goToSearch()
+      else goToMain()
     }
     else
     {

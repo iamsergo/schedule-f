@@ -15,21 +15,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { MAIN_PANEL, SCHEDULE_PANEL } from '../../constants'
 import { RootState } from '../../store/rootReducer'
 import { setActivePanel } from '../../store/slices/navigation'
-import { clearSearchedSchedules, requestSchedule, requestSearchSchedule } from '../../store/slices/schedule'
+import { clearSearchedSchedules, requestSchedule, requestSearchSchedule, setQ } from '../../store/slices/schedule'
 import { HrefTitle, PanelProps } from '../../types'
 
 const SearchPanel: React.FC<PanelProps> = ({
   id,
 }) => {
   const dispatch = useDispatch()
-  const { isSearchLoading, searchedSchedules, } = useSelector((s: RootState) => s.schedule)
+  const { isSearchLoading, searchedSchedules, q } = useSelector((s: RootState) => s.schedule)
   const { user } = useSelector((s: RootState) => s.user)
 
-  const [q, setQ] = React.useState<string>('')
   const handleQChange = (e: ChangeEvent<HTMLInputElement>) => {
     const q = e.target.value
 
-    setQ(q)
+    dispatch(setQ(q))
     if(!q)
     {
       dispatch(clearSearchedSchedules())
@@ -41,9 +40,6 @@ const SearchPanel: React.FC<PanelProps> = ({
     window.setTimeout(() => {
       searchRef.current && searchRef.current.focus()
     },100)
-    return () => {
-      dispatch(clearSearchedSchedules())
-    }
   },[])
 
   const [debQ, setDebQ] = React.useState(q)
@@ -58,7 +54,7 @@ const SearchPanel: React.FC<PanelProps> = ({
   }, [q])
 
   React.useEffect(() => {
-    if(debQ)
+    if(debQ && searchedSchedules.length === 0)
     {
       dispatch(requestSearchSchedule({
         univer: user!.univer!.code,

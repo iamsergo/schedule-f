@@ -115,6 +115,10 @@ const scheduleSlice = createSlice({
     {
       state.lessonStats = action.payload
     },
+    setQ(state, action)
+    {
+      state.q = action.payload
+    },
   },
   extraReducers(builder)
   {
@@ -169,5 +173,6 @@ export const {
   clearScheduleHistory,
   clearSearchedSchedules,
   setLessonStats,
+  setQ,
 } = scheduleSlice.actions
 export default scheduleSlice.reducer

@@ -4,6 +4,7 @@ import { PanelType } from "../../types";
 
 type NavigationState = {
   activePanel: PanelType
+  prevActivePanel: PanelType
   history: PanelType[]
   activeModal: string | null
 }
@@ -12,6 +13,7 @@ const initialState: NavigationState = {
   activePanel: MAIN_PANEL,
   history: [MAIN_PANEL],
   activeModal: null,
+  prevActivePanel: MAIN_PANEL,
 }
 
 const navigationSlice = createSlice({
@@ -20,6 +22,7 @@ const navigationSlice = createSlice({
   reducers: {
     setActivePanel(state, action)
     {
+      state.prevActivePanel = state.activePanel
       state.activePanel = action.payload
     },
     setActiveModal(state, action)
