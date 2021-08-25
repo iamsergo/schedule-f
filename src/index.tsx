@@ -14,7 +14,8 @@ import App from './App';
 bridge.send('VKWebAppInit')
 bridge.subscribe(e => {
   if(e.detail.type === 'VKWebAppUpdateConfig')
-    document.body.setAttribute('scheme', e.detail.data.scheme)
+    // document.body.setAttribute('scheme', e.detail.data.scheme)
+    document.body.setAttribute('scheme', 'space_gray')
 })
 
 ReactDOM.render(

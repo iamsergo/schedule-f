@@ -55,8 +55,8 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     const initApp = async () => {
-      // const userData = await bridge.send('VKWebAppGetUserInfo')
-      const userData = { id: 0 }
+      const userData = await bridge.send('VKWebAppGetUserInfo')
+      // const userData = { id: 0 }
       dispatch(setUserData(userData))
       dispatch(requestConfigUnivers())
       dispatch(requestGetUser(userData.id))
