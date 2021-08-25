@@ -55,8 +55,8 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     const initApp = async () => {
-      const userData = await bridge.send('VKWebAppGetUserInfo')
-      // const userData = { id: 0 }
+      // const userData = await bridge.send('VKWebAppGetUserInfo')
+      const userData = { id: 0 }
       dispatch(setUserData(userData))
       dispatch(requestConfigUnivers())
       dispatch(requestGetUser(userData.id))
@@ -115,10 +115,11 @@ const App: React.FC = () => {
       !isLoaderShowing
     )
     {
+      window.alert('modal...')
       openModal()      
     }
     isFirstLoading = false
-  }, [isConfigLoading, isUserLoading, isLoaderShowing])
+  }, [isConfigLoading, isUserLoading])
 
   return (
     <ConfigProvider isWebView={true}>

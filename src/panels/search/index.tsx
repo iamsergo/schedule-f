@@ -54,7 +54,7 @@ const SearchPanel: React.FC<PanelProps> = ({
   }, [q])
 
   React.useEffect(() => {
-    if(debQ && searchedSchedules.length === 0)
+    if(debQ)
     {
       dispatch(requestSearchSchedule({
         univer: user!.univer!.code,

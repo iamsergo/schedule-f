@@ -13,6 +13,7 @@ import {
   Progress,
   Separator,
   Spinner,
+  usePlatform,
 } from '@vkontakte/vkui'
 import {
   Icon28Search,
@@ -24,12 +25,17 @@ import {
   Icon28EducationOutline,
   Icon28ArrowUpOutline,
   Icon28ArrowDownOutline,
+  Icon28FavoriteOutline,
+  Icon28ShareOutline,
+  Icon28SmartphoneOutline,
+  Icon28UsersOutline,
   
 } from '@vkontakte/icons';
+import bridge from '@vkontakte/vk-bridge'
 import { PanelProps } from '../../types'
 import { useSelector } from 'react-redux';
 import { setActivePanel } from '../../store/slices/navigation';
-import { SCHEDULE_PANEL, SEARCH_PANEL, SETTINGS_PANEL } from '../../constants';
+import { GROUP_ID, SCHEDULE_PANEL, SEARCH_PANEL, SETTINGS_PANEL } from '../../constants';
 import { requestDeleteUserSchedule, requestGetUser, setIsLoaderShowing } from '../../store/slices/user';
 import { requestConfigUnivers } from '../../store/slices/config';
 import { RootState } from '../../store/rootReducer';
@@ -58,6 +64,32 @@ const MainPanel: React.FC<PanelProps> = ({
     error: configError,
     qoute,
   } = useSelector((s: RootState) => s.config)
+
+  const platform = usePlatform()
+
+  const addToFavorite = () => {
+    bridge.send('VKWebAppAddToFavorites')
+      .then(console.log)
+      .catch(console.log)
+  }
+
+  const joinToGroup = () => {
+    bridge.send('VKWebAppJoinGroup', { group_id: GROUP_ID })
+      .then(console.log)
+      .catch(console.log)
+  }
+
+  const addToHomeScreen = () => {
+    bridge.send('VKWebAppAddToHomeScreen')
+      .then(console.log)
+      .catch(console.log)
+  }
+
+  const share = () => {
+    bridge.send('VKWebAppShare', {link: 'https://vk.com/app7908078'})
+      .then(console.log)
+      .catch(console.log)
+  }
 
   const goToSearchSchedule = () => {
     dispatch(setActivePanel(SEARCH_PANEL))
@@ -105,6 +137,11 @@ const MainPanel: React.FC<PanelProps> = ({
     setTimeLessonsIsOpen(!timeLessonsIsOpen)
   }
 
+  const [appActionsIsOpen, setAppActionsIsOpen] = React.useState(false)
+  const toggleAppActions = () => {
+    setAppActionsIsOpen(!appActionsIsOpen)
+  }
+
   let content
   if(isUserLoading || isConfigLoading)
   {
@@ -130,10 +167,55 @@ const MainPanel: React.FC<PanelProps> = ({
     if(user.univer && currentUniver)
     {
       univerContent = (<>
-        {qoute && <>
-          <Qoute qoute={qoute} />
-          <Separator/>
-        </>}
+        {qoute && <Qoute qoute={qoute} />}
+        
+        <Div style={{paddingTop:0}}>
+          <Card>
+            <Cell
+              onClick={toggleAppActions}
+              after={!appActionsIsOpen ? <Icon28ChevronDownOutline /> : <Icon28ChevronUpOutline/>}
+            >Доступ к приложению</Cell>
+            {appActionsIsOpen && <>
+              {true &&
+                <Cell
+                  before={
+                    <Icon28FavoriteOutline style={{marginRight:8,padding:0}} fill="orange"/>
+                  }
+                  description="Мини-приложения > Избранное"
+                  onClick={addToFavorite}
+                >В избранном</Cell>
+              }
+              {true &&
+                <Cell
+                  before={
+                    <Icon28UsersOutline style={{marginRight:8,padding:0}} fill="var(--accent)"/>
+                  }
+                  description="Шапка группы"
+                  onClick={joinToGroup}
+                >Вступите в группу</Cell>
+              }
+              {platform === 'android' &&
+                <Cell
+                  before={
+                    <Icon28SmartphoneOutline style={{marginRight:8,padding:0}} fill="tan"/>
+                  }
+                  description="Быстрый доступ с дом. экрана"
+                  onClick={addToHomeScreen}
+                >На домашний экран</Cell>
+              }
+              {true &&
+                <Cell
+                  before={
+                    <Icon28ShareOutline style={{marginRight:8}} fill="teal"/>
+                  }
+                  description="Доступ по ссылке"
+                  onClick={share}
+                >Расскажите друзьям</Cell>
+              }
+            </>}
+          </Card>
+        </Div>
+        <Separator/>
 
         <Div>
           <Card>
