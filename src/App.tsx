@@ -3,12 +3,11 @@ import {
   AppRoot,
   ConfigProvider,
   ScreenSpinner,
-  usePlatform,
   View,
 } from '@vkontakte/vkui';
-import bridge from '@vkontakte/vk-bridge'
+import bridge from '@vkontakte/vk-bridge';
 import { useDispatch, useSelector } from 'react-redux';
-import { GROUP_ID, MAIN_PANEL, SCHEDULE_PANEL, SEARCH_PANEL, SETTINGS_PANEL } from './constants';
+import { MAIN_PANEL, SCHEDULE_PANEL, SEARCH_PANEL, SETTINGS_PANEL } from './constants';
 import MainPanel from './panels/main';
 import SchedulePanel from './panels/schedule';
 import SearchPanel from './panels/search';
@@ -17,23 +16,15 @@ import { RootState } from './store/rootReducer';
 import ActionsModal from './components/ActionsModal';
 import { requestGetUser, setUserData } from './store/slices/user';
 import { requestConfigUnivers, requestQoute, setConfig, setCurrentUniver } from './store/slices/config';
-import { setActiveModal } from './store/slices/navigation';
 
-let isFirstLoading = true
 const App: React.FC = () => {
   const dispatch = useDispatch()
   const { activePanel, history } = useSelector((s: RootState) => s.navigation)
   const {
-    isLoaderShowing,
     user,
-    isLoading: isUserLoading,
-    error: userError,
     isUniverLoading,
     isScheduleLoading,
   } = useSelector((s: RootState) => s.user)
-  const { config, isLoading: isConfigLoading, error: configError, } = useSelector((s: RootState) => s.config)
-
-  const platform = usePlatform()
 
   React.useEffect(() => {
     document.body.setAttribute('scheme', 'space_gray')
@@ -55,8 +46,8 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     const initApp = async () => {
-      // const userData = await bridge.send('VKWebAppGetUserInfo')
-      const userData = { id: 0 }
+      const userData = await bridge.send('VKWebAppGetUserInfo')
+      // const userData = { id: 0 }
       dispatch(setUserData(userData))
       dispatch(requestConfigUnivers())
       dispatch(requestGetUser(userData.id))
@@ -86,40 +77,6 @@ const App: React.FC = () => {
       setPopout(null)
     }
   }, [isUniverLoading, isScheduleLoading])
-
-  React.useEffect(() => {
-    const openModal = async () => {
-      if(platform === 'android')
-      {
-        const addToHomeScreenInfo = await bridge.send('VKWebAppAddToHomeScreenInfo')
-        if(
-          addToHomeScreenInfo.is_feature_supported &&
-          addToHomeScreenInfo.is_added_to_home_screen
-        ) return
-      }
-
-      if(config.is_favorite) return
-
-      const groupInfo = await bridge.send(
-        'VKWebAppGetGroupInfo',
-        {'group_id': GROUP_ID}
-      )
-      if(groupInfo.is_member) return
-
-      dispatch(setActiveModal('actions'))
-    }
-    
-    if(
-      !isConfigLoading && !isUserLoading && !isFirstLoading &&
-      !userError && !configError &&
-      !isLoaderShowing
-    )
-    {
-      window.alert('modal...')
-      openModal()      
-    }
-    isFirstLoading = false
-  }, [isConfigLoading, isUserLoading])
 
   return (
     <ConfigProvider isWebView={true}>
