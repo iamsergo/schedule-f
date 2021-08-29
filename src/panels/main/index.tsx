@@ -194,7 +194,7 @@ const MainPanel: React.FC<PanelProps> = ({
                   onClick={joinToGroup}
                 >Вступите в группу</Cell>
               }
-              {platform === 'android' &&
+              {platform !== 'ios' &&
                 <Cell
                   before={
                     <Icon28SmartphoneOutline style={{marginRight:8,padding:0}} fill="tan"/>
