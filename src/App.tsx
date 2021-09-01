@@ -46,12 +46,8 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     const initApp = async () => {
-      const inVk = window.location.origin.includes('vk.com')
-      const userDataRequest: Promise<{id:number}> =
-        inVk
-          ? bridge.send('VKWebAppGetUserInfo')
-          : new Promise((resolve) => resolve({ id: 0 }))
-      const userData = await userDataRequest
+      const userData = await bridge.send('VKWebAppGetUserInfo')
+      // const userData = {id:0}
 
       dispatch(setUserData(userData))
       dispatch(requestConfigUnivers())
