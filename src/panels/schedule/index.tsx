@@ -29,7 +29,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/rootReducer'
 import { DayRange, Lesson, PanelProps, WeekRange } from '../../types'
 import { getDiff, getLessonsInDay, getStatsForLesson } from '../../utils'
-import { clearScheduleHistory, requestSchedule, scheduleHistoryBack, setLessonStats } from '../../store/slices/schedule';
+import { clearScheduleHistory, clearSearchedSchedules, requestSchedule, scheduleHistoryBack, setLessonStats, setQ } from '../../store/slices/schedule';
 import { setActiveModal, setActivePanel } from '../../store/slices/navigation';
 import { MAIN_PANEL, SEARCH_PANEL } from '../../constants';
 import { requestDeleteUserSchedule, requestUpdateUserSchedule } from '../../store/slices/user';
@@ -70,6 +70,8 @@ const SchedulePanel: React.FC<PanelProps> = ({
   const goToMain = () => {
     dispatch(setActivePanel(MAIN_PANEL))
     dispatch(clearScheduleHistory())
+    dispatch(setQ(''))
+    dispatch(clearSearchedSchedules())
   }
 
   const goToSearch = () => {

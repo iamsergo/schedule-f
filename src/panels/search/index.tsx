@@ -3,6 +3,7 @@ import {
   CellButton,
   Div,
   FixedLayout,
+  Footer,
   Panel,
   PanelHeader,
   PanelHeaderBack,
@@ -65,6 +66,8 @@ const SearchPanel: React.FC<PanelProps> = ({
 
   const goToMainPanel = () => {
     dispatch(setActivePanel(MAIN_PANEL))
+    dispatch(setQ(''))
+    dispatch(clearSearchedSchedules())
   }
 
   const goToSchedule = (schedule: HrefTitle) => {
@@ -96,9 +99,10 @@ const SearchPanel: React.FC<PanelProps> = ({
           onClick={() => goToSchedule(schedule)}
         >{schedule.title}</CellButton>
       })}
-      <div style={{textAlign:'center'}}>
-        Уточните или исправьте запрос, если не нашли нужное расписание
-      </div>
+      <Footer>
+        Найдено {searchedSchedules.length} расписаний <br/>
+        Уточните или исправьте запрос, <br/> если не нашли нужное расписание
+      </Footer>
     </>)
   }
 
