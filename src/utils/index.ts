@@ -128,12 +128,11 @@ export const getStatsForLesson = ({
     weeks1Count * thisLessons1.filter(l => l.type === 2).length +
     (weeks0Count + weeks1Count) * thisLessons2.filter(l => l.type === 2).length
 
-
   const now = new Date()
   const nowMs = now.getTime()
   const startMs = new Date(startDate).getTime()
 
-  if(nowMs - startMs < 0)
+  if(nowMs < startMs)
   {
     return {
       fromWhoms: getFromWhomsList(thisLessons),
@@ -157,7 +156,7 @@ export const getStatsForLesson = ({
   stats.lec.pass =
     weeksPassed0Count * thisLessons0.filter(l => l.type === 0).length +
     weeksPassed1Count * thisLessons1.filter(l => l.type === 0).length +
-    (weeks0Count + weeksPassed1Count) * thisLessons2.filter(l => l.type === 0).length
+    (weeksPassed0Count + weeksPassed1Count) * thisLessons2.filter(l => l.type === 0).length
 
   stats.pr.pass =
     weeksPassed0Count * thisLessons0.filter(l => l.type === 1).length +
@@ -169,34 +168,30 @@ export const getStatsForLesson = ({
     weeksPassed1Count * thisLessons1.filter(l => l.type === 2).length +
     (weeksPassed0Count + weeksPassed1Count) * thisLessons2.filter(l => l.type === 2).length
 
-
   const currentWeek = weeks[currentWeekIdx]
   if(currentWeek)
   {
     const d = now.getDay()
     const currentDay = d === 0 ? 6 : d - 1
-    
-    const thisLessonsEarlier = thisLessons
-      .filter(lesson => {
-        if(lesson.week !== currentWeek.weekType && lesson.week !== 2) return false
-        if(lesson.day < currentDay) return true
-        if(lesson.day === currentDay)
-        {
-          const n = now.getTime()
-          const [start, end] = time
-  
-          const [startHours, startMinutes] = start.split(':').map(s=>+s)
-          const s = new Date(n).setHours(startHours, startMinutes)
-          if(s > n) return false
-  
-          const [endHours, endMinutes] = end.split(':').map(s=>+s)
-          const e = new Date(n).setHours(endHours, endMinutes)
-          if(n > e) return false
-  
-          return true
-        }
-        return false
-      })
+    const n = now.getTime()
+
+    const thisLessonsEarlier =
+      thisLessons
+        .filter(lesson => {
+          if(lesson.week !== currentWeek.weekType && lesson.week !== 2) return false
+          if(lesson.day < currentDay) return true
+          if(lesson.day === currentDay)
+          {
+            const [start, end] = lesson.time
+            const [startHours, startMinutes] = start.split(':').map(s=>+s)
+            const s = new Date(n).setHours(startHours, startMinutes)
+            const [endHours, endMinutes] = end.split(':').map(s=>+s)
+            const e = new Date(n).setHours(endHours, endMinutes)
+            
+            if(n > s && n > e) return true
+          }
+          return false
+        })
   
     thisLessonsEarlier.forEach(lesson => {
       const typeLesson = (['lec','pr','lab'][lesson.type]) as keyof Stats
