@@ -79,7 +79,7 @@ export const getDiff = (their: Lesson[], my: Lesson[]): Lesson[] => {
     const dayEqual = a.day === b.day
     const lessonNumEqual = a.lesson === b.lesson
     const weekEqual = a.week === b.week || a.week === 2 || b.week === 2
-    const groupEqual = a.group === b.group || a.group === 2 || b.group === 2
+    const groupEqual = a.group === b.group || a.group === 3 || b.group === 3
 
     return dayEqual && lessonNumEqual && weekEqual && groupEqual
   }

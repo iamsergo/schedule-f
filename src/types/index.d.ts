@@ -17,7 +17,7 @@ export type DayRange = 0 | 1 | 2 | 3 | 4 | 5
 export type LessonRange = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 export type LessonType = 0 | 1 | 2
 export type WeekRange = 0 | 1 | 2
-export type GroupRange = 0 | 1 | 2
+export type GroupRange = 0 | 1 | 2 | 3
 export type HrefTitle = { title: string, href: string }
 
 export type Lesson = {
