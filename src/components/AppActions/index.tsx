@@ -11,8 +11,8 @@ import {
   Icon28UsersOutline,
 } from "@vkontakte/icons"
 import bridge from '@vkontakte/vk-bridge'
-import './AppActions.sass'
 import { GROUP_ID } from "../../constants"
+import './AppActions.sass'
 
 type AppActionsProps = {
   closeModal: () => void
@@ -53,41 +53,6 @@ const AppActions: React.FC<AppActionsProps> = ({
 
   return (
     <div>
-      {/* <Header>Не теряйте приложение</Header>
-      <Div className="actions-wrapper" style={{paddingTop:0}}>
-        {true &&
-          <div className="actions__item">
-            <IconButton>
-              <Icon28FavoriteOutline fill="orange"/>
-            </IconButton>
-            Добавить в избранное
-          </div>
-        }
-        {true &&
-          <div className="actions__item">
-            <IconButton>
-              <Icon28UsersOutline fill="var(--accent)"/>
-            </IconButton>
-            Вступить в сообщество
-          </div>
-        }
-        {true &&
-          <div className="actions__item">
-            <IconButton>
-              <Icon28ShareOutline fill="teal"/>
-            </IconButton>
-            Поделиться приложением
-          </div>
-        }
-        {true &&
-          <div className="actions__item">
-            <IconButton>
-              <Icon28SmartphoneOutline fill="tan"/>
-            </IconButton>
-            На домашний экран
-          </div>
-        }
-      </Div> */}
       {true &&
         <Cell
           before={

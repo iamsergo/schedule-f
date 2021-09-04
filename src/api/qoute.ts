@@ -7,8 +7,8 @@ const getQoute = async (): Promise<Qoute | null> => {
   return await res.json()
 }
 
-const config = {
+const qoute = {
   getQoute,
 }
 
-export default config
+export default qoute

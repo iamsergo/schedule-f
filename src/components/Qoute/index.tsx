@@ -1,6 +1,5 @@
 import React from 'react'
-import { Icon28ChevronDownOutline, Icon28ChevronUpOutline, Icon28Like, Icon28LikeOutline } from '@vkontakte/icons'
-import { Avatar, Card, Cell, Div, IconButton } from '@vkontakte/vkui'
+import { Card, Cell, Div } from '@vkontakte/vkui'
 import { Qoute as QouteType } from '../../types'
 
 type QouteProps = {

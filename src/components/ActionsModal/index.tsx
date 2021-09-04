@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/rootReducer"
 import { setActiveModal } from "../../store/slices/navigation"
 import { Icon24Dismiss } from "@vkontakte/icons"
-import './ActionsModal.sass'
 import { requestSchedule } from "../../store/slices/schedule"
+import './ActionsModal.sass'
 
 
 const ActionsModal = () => {

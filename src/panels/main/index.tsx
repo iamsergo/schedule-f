@@ -36,7 +36,7 @@ import { PanelProps } from '../../types'
 import { useSelector } from 'react-redux';
 import { setActivePanel } from '../../store/slices/navigation';
 import { GROUP_ID, SCHEDULE_PANEL, SEARCH_PANEL, SETTINGS_PANEL } from '../../constants';
-import { requestDeleteUserSchedule, requestGetUser, setIsLoaderShowing } from '../../store/slices/user';
+import { requestDeleteUserSchedule, requestGetUser } from '../../store/slices/user';
 import { requestConfigUnivers } from '../../store/slices/config';
 import { RootState } from '../../store/rootReducer';
 import { getFromWhomsList, getLessonsInDay, isCurrentWeek, isPassWeek } from '../../utils';
