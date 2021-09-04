@@ -1,6 +1,5 @@
 import React from "react"
-import { Avatar, Caption, Card, CellButton, Div, Header, ModalCard, ModalPage, ModalPageHeader, ModalRoot, Progress } from "@vkontakte/vkui"
-import AppActions from "../AppActions"
+import { Caption, Card, CellButton, Div, Header, ModalPage, ModalPageHeader, ModalRoot, Progress } from "@vkontakte/vkui"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/rootReducer"
 import { setActiveModal } from "../../store/slices/navigation"
@@ -33,14 +32,6 @@ const ActionsModal = () => {
       activeModal={activeModal}
       onClose={closeModal}
     >
-      <ModalCard
-        id="actions"
-        header="Не теряйте приложение"
-        subheader="Т.к. приложение не находится в каталоге, найти через поиск его не получится. Поэтому, чтобы не потерять его, сохраните любым удомным способом:"
-        icon={<Avatar size={72}/>}
-      >
-        <AppActions closeModal={closeModal}/>
-      </ModalCard>
       <ModalPage id="stats">
         <ModalPageHeader
           right={<Icon24Dismiss onClick={closeModal} style={{marginRight:8}}/>}

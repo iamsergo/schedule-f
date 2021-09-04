@@ -220,3 +220,8 @@ export const isCurrentLesson = (lessonTime: number[][]): boolean => {
 
   return true
 }
+
+export const getDayNameByIndex = (id: DayRange): string => {
+  const DAYS = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота']
+  return DAYS[id]
+}
