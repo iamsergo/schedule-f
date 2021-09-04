@@ -10,17 +10,13 @@ type QouteProps = {
 const Qoute: React.FC<QouteProps> = ({
   qoute,
 }) => {
-  const [isOpen, setIsOpen] = React.useState(false)
-
   return (
     <Div>
       <Card>
-        <Cell
-          onClick={()=>setIsOpen(!isOpen)}
-          description="Цитата дня"
-          after={!isOpen ? <Icon28ChevronDownOutline/> : <Icon28ChevronUpOutline/>}
-        >{qoute.author}</Cell>
-        {isOpen && <Div style={{paddingTop:4}}>{qoute.text}</Div>}
+        <Cell disabled description="Цитата дня">
+          {qoute.author}
+        </Cell>
+        <Div style={{paddingTop:4}}>{qoute.text}</Div>
       </Card>
     </Div>
   )
