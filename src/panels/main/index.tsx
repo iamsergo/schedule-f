@@ -62,8 +62,8 @@ const MainPanel: React.FC<PanelProps> = ({
     toEndPercent,
     isLoading: isConfigLoading,
     error: configError,
-    qoute,
   } = useSelector((s: RootState) => s.config)
+  const { qoute } = useSelector((s: RootState) => s.qoute)
 
   const platform = usePlatform()
 

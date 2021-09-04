@@ -15,7 +15,8 @@ import SettingsPanel from './panels/settings';
 import { RootState } from './store/rootReducer';
 import ActionsModal from './components/ActionsModal';
 import { requestGetUser, setUserData } from './store/slices/user';
-import { requestConfigUnivers, requestQoute, setConfig, setCurrentUniver } from './store/slices/config';
+import { requestConfigUnivers, setConfig, setCurrentUniver } from './store/slices/config';
+import { requestQoute } from './store/slices/qoute';
 
 const App: React.FC = () => {
   const dispatch = useDispatch()
