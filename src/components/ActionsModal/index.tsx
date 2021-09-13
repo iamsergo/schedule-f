@@ -51,7 +51,7 @@ const ActionsModal = () => {
               </Caption>
             }
           </Div>
-          <Div style={{padding:'0px 12px'}}>
+          <Div>
             {Object.entries(lessonStats.stats).map(([typeLesson, values]) => {
               const { pass, total } = values
               if(total === 0) return null
@@ -77,15 +77,17 @@ const ActionsModal = () => {
               )
             })}
           </Div>
-          <Div>
-            <Header>Преподаватели / группы</Header>
-            {lessonStats.fromWhoms.map(fromWhom => {
-              return <CellButton
-                key={fromWhom.href}
-                onClick={() => goToSchedule(fromWhom.href)}
-              >{fromWhom.title}</CellButton>
-            })}
-          </Div>
+          {lessonStats.fromWhoms.length !== 0 &&
+            <Div style={{paddingTop:0}}>
+              <Header>Преподаватели / группы</Header>
+              {lessonStats.fromWhoms.map(fromWhom => {
+                return <CellButton
+                  key={fromWhom.href}
+                  onClick={() => goToSchedule(fromWhom.href)}
+                >{fromWhom.title}</CellButton>
+              })}
+            </Div>
+          }
         </>}
       </ModalPage>
     </ModalRoot>
