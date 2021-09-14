@@ -25,7 +25,7 @@ const SemestrInfo: React.FC = () => {
       <Card>
         <Header
           subtitle={`До конца семестра ${toEndDays} дн. (${new Date(currentUniver!.endDate).toLocaleDateString()})`}
-        >{currentWeek ? 'Числитель(четная)' : 'Знаменатель(нечетная)'}</Header>
+        >{currentWeek === 1 ? 'Числитель(четная)' : 'Знаменатель(нечетная)'}</Header>
         <Progress
           style={{margin: '0px 12px', background: 'gray'}}
           value={toEndPercent}
